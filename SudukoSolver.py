@@ -27,23 +27,20 @@ def import_grid():
 
 
 def create_candidate_grid():
-# Creates a 9x9 grid with each cell containing a 3x3 grid                           #TODO This doesn't need to be a 3x3 grid, 1D list will work
-    candidate_grid = []                                                             #   3x3 grid will be virtualised in the print_candidate_grid method
+# Creates a 9x9 grid with each cell containing a list of 9 candidates
+    candidate_grid = []
     for i in range(9):
         candidate_grid.append([])
         for j in range(9):
             candidate_grid[i].append([])
-            #candidate_grid[i].append(j)
-            for k in range(3):
-                candidate_grid[i][j].append([])
-                for l in range(3):
-                    candidate_grid[i][j][k].append(0)
+            for k in range(9):
+                candidate_grid[i][j].append(".")
 
     return candidate_grid
 
 
 def populate_candidate_grid(candidate_grid):
-# populates candidate grid with coordinates for debugging
+# populates candidate grid with values for debugging
     for i in range(9):
         for j in range(9):
             for k in range(3):
@@ -51,32 +48,50 @@ def populate_candidate_grid(candidate_grid):
                     candidate_grid[i][j][k][l] = str(i)+str(j)+str(k)+str(l)
 
 
-def print_candidate_grid(candidate_grid):                                           #TODO The passed in candidate_grid will not contain inner 3x3 grid.
-    count = 0       # Tracks the printed row for line printing                      #   Candidates will be stored in each cell as a list. Print will still display 3x3 grid
+def print_candidate_grid(candidate_grid):          
+#Prints large Candidate grid 27x27
+#Function iterates through each row, printing 3 candidates at a time for each cell
+#Therefor each row prints 3 lines before moving to next row
     for i in range(9):
-        for k in range(3):
-            for j in range(9):
-                for l in range(3):
-                    val = candidate_grid[i][j][k][l]
-                    print(val if val != 0 else ".", end=" ")
-                
-                # vertical lines
-                if j != 8:
-                    if j % 3 == 2 and j != 0:
-                        print("|| ",end="")
-                    else:
-                        print("| ",end="")
-
-            print()     # new line after each row
-            count+=1
-
-            # horizontal lines
-            if count % 3 == 0 and count != 27:
-                if count % 9 == 0:
-                    print("=" * 71)     # print = for every 9th line
-                else:
-                    print("-" * 71)     # print - for every 3rd line
-
+        for j in range(9):
+        #Prints values 1-3 in each candidate cell
+            for k in range(3):
+                print(candidate_grid[i][j][k], end=" ")
+            #Printing lines
+            if j % 3 == 2 and j != 8:
+                print("||", end=" ")
+            elif j != 8:
+                print("|", end=" ")
+            else:
+                print()
+        for j in range(9):
+        #Prints values 4-6 in each candidate cell
+            for k in range(3, 6):
+                print(candidate_grid[i][j][k], end=" ")
+            #Printing lines
+            if j % 3 == 2 and j != 8:
+                print("||", end=" ")
+            elif j != 8:
+                print("|", end=" ")
+            else:
+                print()
+        for j in range(9):
+        #Prints values 7-9 in each candidate cell
+            for k in range(6, 9):
+                print(candidate_grid[i][j][k], end=" ")
+            #Printing lines
+            if j % 3 == 2 and j != 8:
+                print("||", end=" ")
+            elif j != 8:
+                print("|", end=" ")
+            else:
+                print()
+        
+        #Horizontal lines
+        if i % 3 != 2:
+            print("-" * 71)
+        elif i != 8:
+            print("=" * 71)
 
 
 #========== MAIN ==========
@@ -90,8 +105,8 @@ def main():
 
     # Testing possible_grid structure
     candidate_grid = create_candidate_grid()
-    #populate_candidate_grid(candidate_grid)
     print_candidate_grid(candidate_grid)
+
 
 if __name__ == '__main__':
     main()
