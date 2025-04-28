@@ -25,10 +25,9 @@ Blocks
 . 4 6 | . . . | 7 3 . 
 . . . | 5 . . | 4 . . 
 
-[row][col][inner row][inner col]
-    Identify the larger, outside Block first, then inner coordinates
-    The '0' coordinates are [0][1][0][1]
-. . . | . . . | . . . || . 0 . | . . . | . . . || . . . | . . . | . . . 
+[row][col][candidate]
+    The '2' candidate are [0][1][1]
+. . . | . . . | . . . || . 2 . | . . . | . . . || . . . | . . . | . . . 
 . . . | . . . | . . . || . . . | . . . | . . . || . . . | . . . | . . . 
 . . . | . . . | . . . || . . . | . . . | . . . || . . . | . . . | . . . 
 -----------------------------------------------------------------------
@@ -134,6 +133,18 @@ UPDATE_CANDIDATE_GRID_BLOCK()
         REMOVE NUMBER
         IF CANDIDATE CELL CONTAINS 1 NUMBER
             SOLVE_CELL()
+
+INITIATE_CANDIDATE_GRID()
+    FOR EACH EMPTY CELL
+        FOR NUMBERS 1 - 9
+            IF NUMBER NOT IN BLOCK
+                IF NUMBER NOT IN ROW
+                    IF NUMBER NOT COLLUMN
+                        INSERT NUMBER INTO CANDIDATE GRID CELL
+
+
+
+
 
 MAIN
     READ CSV FILE TO BUILD GRID

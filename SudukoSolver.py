@@ -23,6 +23,7 @@ def import_grid():
         reader = csv.reader(csvfile)
         for row in reader:
             grid.append([int(num) for num in row])
+
     return grid
 
 
@@ -43,9 +44,8 @@ def populate_candidate_grid(candidate_grid):
 # populates candidate grid with values for debugging
     for i in range(9):
         for j in range(9):
-            for k in range(3):
-                for l in range(3):
-                    candidate_grid[i][j][k][l] = str(i)+str(j)+str(k)+str(l)
+            for k in range(9):
+                    candidate_grid[i][j][k] = str(i)+str(j)+str(k)
 
 
 def print_candidate_grid(candidate_grid):          
@@ -94,17 +94,72 @@ def print_candidate_grid(candidate_grid):
             print("=" * 71)
 
 
+def initialise_candidate_grid(grid, candidate_grid):
+    for i in range(9):
+        for j in range(9):
+            if grid[i][j]==0:
+                for x in range(1,10):
+                    if not is_number_in_block(x, i, j, grid):
+                        if not is_number_in_row(x, i, grid):
+                            if not is_number_in_col(x, j, grid):
+                                candidate_grid[i][j][x-1] = x
+
+
+def is_number_in_block(x, i, j, grid):
+    block_contains_x = False
+    #Set i to row start of block
+    if i <= 2:
+        ii = 0
+    elif 3 <= i <= 5:
+        ii = 3
+    elif 6 <= i <= 8:
+        ii = 6
+    #Set j to col start of block
+    if j <= 2:
+        jj = 0
+    elif 3 <= j <= 5:
+        jj = 3
+    elif 6 <= j <= 8:
+        jj = 6
+
+    for row_counter in range (3):
+        for col_counter in range(3):
+            if x == grid[ii][jj]:
+                block_contains_x = True
+                #DEBUG print(f"Set true @{ii,jj} for x{x}")
+            jj+=1
+        jj-=3
+        ii+=1
+
+    return block_contains_x
+
+
+def is_number_in_row(x, i, grid):
+    row_contains_x = False
+    for jj in range(9):
+        if x == grid[i][jj]:
+            row_contains_x = True
+
+    return row_contains_x
+
+
+def is_number_in_col(x, j, grid):
+    col_contains_x = False
+    for ii in range(9):
+        if x == grid[ii][j]:
+            col_contains_x = True
+
+    return col_contains_x
+
 #========== MAIN ==========
 def main():
     grid = import_grid()
     print_grid(grid)
-    print(f"[3][0] = {grid[3][0]}")
-    print(f"[3][3] = {grid[3][3]}")
-
     print()
 
-    # Testing possible_grid structure
     candidate_grid = create_candidate_grid()
+    initialise_candidate_grid(grid, candidate_grid)
+
     print_candidate_grid(candidate_grid)
 
 
