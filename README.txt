@@ -26,6 +26,9 @@ Blocks
 . . . | 5 . . | 4 . . 
 
 [row][col][candidate]
+    Locate the grid cell first [0][1]
+    Then locate numerical value position in list of candidates
+    Candidate 1 = item 0. Candidate 9 = item 8.
     The '2' candidate are [0][1][1]
 . . . | . . . | . . . || . 2 . | . . . | . . . || . . . | . . . | . . . 
 . . . | . . . | . . . || . . . | . . . | . . . || . . . | . . . | . . . 
@@ -84,9 +87,8 @@ SUDO
 
 
 NAKED_SINGLE_CHECK()
-    IF ANY OF THE FOLLOWING RETURN TRUE
-        CHECK CELL BY CELL FOR SINGLE CANDIDATE
-    DO THIS
+    IF ANY CELL CONTAINS ONLY A SINGLE CANDIDATE
+        SOLVE CELL()
         NAKED_SINGLE_CHECK()
 
 HIDDEN_SINGLE_CHECK()
@@ -95,14 +97,16 @@ HIDDEN_SINGLE_CHECK()
         CHECK HIDDEN SINGLE COLLUMN
         CHECK HIDDEN SINGLE BLOCK
     DO THIS
+        SOLVE_CELL()
+        NAKED_SINGLE_CHECK()
         HIDDEN_SINGLE_CHECK()
 
-hidden_pair_check()
+HIDDEN_PAIR_CHECK()
     CHECK HIDDEN PAIR ROW
     CHECK HIDDEN PAIR COLLUMN
     CHECK HIDDEN PAIR BLOCK
 
-naked_pair_check()
+NAKED_PAIR_CHECK()
     CHECK NAKED PAIR ROW
     CHECK NAKED PAIR COLLUMN
     CHECK NAKED PAIR BLOCK
