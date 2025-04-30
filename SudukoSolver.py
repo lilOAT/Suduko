@@ -2,6 +2,7 @@ import csv
 
 #========== FUNCTIONS ==========
 def print_grid(grid):
+    print()
     for i in range(9):
         if i % 3 == 0 and i != 0:
             print("-" * 21)  # horizontal divider every 3 rows
@@ -11,6 +12,7 @@ def print_grid(grid):
             val = grid[i][j]
             print(val if val != 0 else ".", end=" ")
         print()  # new line after each row
+    print()
 
 def import_grid(file_name):
 # Takes a CSV file and creates a 9x9 grid in the form of a 2d list
@@ -139,20 +141,11 @@ def is_number_in_col(x, j, grid):
     return col_contains_x
 
 
-def naked_single_check(candidate_grid, grid):
-    for i in range(9):
-        for j in range(9):
-            non_candidate_count = candidate_grid[i][j].count(".")
-            if non_candidate_count == 8:
-                cell_solution = next(item for item in candidate_grid[i][j] if isinstance(item, int))
-                print(cell_solution, "at ", i,j)
-                solve_cell(candidate_grid, grid, i, j, cell_solution)
-                naked_single_check(candidate_grid, grid)
-                return
-
-
 def solve_cell(candidate_grid, grid, i, j, cell_solution):
     grid[i][j] = cell_solution
+    #Clear solved cell's candidate cell
+    for x in range(9):
+        candidate_grid[i][j][x] = "."
     update_candidate_grid(candidate_grid, i, j, cell_solution)
 
 def update_candidate_grid(candidate_grid, i, j, cell_solution):
@@ -195,26 +188,94 @@ def update_candidate_block(candidate_grid, i, j, cell_solution):
         ii+=1
 
 
-
-def hidden_single_check():
-    hidden_single_row_check()
-    hidden_single_col_check()
-    hidden_single_block_check()
-
-def hidden_single_row_check():
-    pass
-
-
-def hidden_single_col_check():
-    pass
+def naked_single_check(candidate_grid, grid):
+    for i in range(9):
+        for j in range(9):
+            non_candidate_count = candidate_grid[i][j].count(".")
+            if non_candidate_count == 8:
+                cell_solution = next(item for item in candidate_grid[i][j] if isinstance(item, int))
+                print(cell_solution, "at ", i,j)
+                solve_cell(candidate_grid, grid, i, j, cell_solution)
+                naked_single_check(candidate_grid, grid)
+                return
 
 
-def hidden_single_block_check():
-    pass
+def hidden_single_check(candidate_grid, grid):
+    hidden_single_row_check(candidate_grid, grid)
+    hidden_single_col_check(candidate_grid, grid)
+    #hidden_single_block_check(candidate_grid, grid)
+
+def hidden_single_row_check(candidate_grid, grid):
+    for curr_candidate in range(1,10):
+        for i in range(9):
+            candidate_count = 0
+            for j in range(9):
+                if curr_candidate in candidate_grid[i][j]:
+                    candidate_count += 1
+                    ii = i
+                    jj = j
+            if candidate_count == 1:
+                print(f"hidden single row found ({curr_candidate}) at {ii,jj}")
+                solve_cell(candidate_grid, grid, ii, jj, curr_candidate)
+                naked_single_check(candidate_grid, grid)
+                hidden_single_check(candidate_grid, grid)
+                return
+
+
+def hidden_single_col_check(candidate_grid, grid):
+    for curr_candidate in range(1,10):
+        for j in range(9):
+            candidate_count = 0
+            for i in range(9):
+                if curr_candidate in candidate_grid[i][j]:
+                    candidate_count += 1
+                    ii = i
+                    jj = j
+            if candidate_count == 1:
+                print(f"hidden single col found ({curr_candidate}) at {ii,jj}")
+                solve_cell(candidate_grid, grid, ii, jj, curr_candidate)
+                naked_single_check(candidate_grid, grid)
+                hidden_single_check(candidate_grid, grid)
+                return
+
+def hidden_single_block_check(candidate_grid, grid):
+    i = 0
+    j = 0
+    for curr_candidate in range(1,10):
+        candidate_count = 0
+        #Search block
+        for row_count in range(3):
+            for col_count in range(3):
+                print(f"Checking block @{i,j}")
+                if curr_candidate in candidate_grid[i][j]:
+                    candidate_count += 1
+                    ii = i
+                    jj = j
+                j+=1
+            j-=3
+            i+=1
+        i -= 3
+        if candidate_count == 1:
+            print(f"hidden single block found ({curr_candidate}) at {ii,jj}")
+            solve_cell(candidate_grid, grid, ii, jj, curr_candidate)
+            naked_single_check(candidate_grid, grid)
+            hidden_single_check(candidate_grid, grid)
+            return
+        #Move to next block
+        if i != 6:
+            i += 3
+        else:
+            i = 0
+            j += 3
+
+
+
+                
+                    
 
 #========== MAIN ==========
 def main():
-    grid = import_grid('Grid_323.csv')
+    grid = import_grid('Grid_624.csv')
     print_grid(grid)
     print()
 
@@ -233,8 +294,11 @@ def main():
     print()
 
     #Hidden Single Check
-
-
+    print("Executing: Naked Single Check...")
+    hidden_single_check(candidate_grid, grid)
+    print()
+    print_grid(grid)
+    print_candidate_grid(candidate_grid)
 
 if __name__ == '__main__':
     main()
