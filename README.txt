@@ -80,6 +80,7 @@ Techniques
     Naked pair
         2 cells can only be solved with the same candidates, within a house.
         All other appearances of either of these candidates within the house can be removed.
+    Eliminating Single
 
 
 -----------
@@ -102,14 +103,29 @@ HIDDEN_SINGLE_CHECK()
         HIDDEN_SINGLE_CHECK()
 
 HIDDEN_PAIR_CHECK()
-    CHECK HIDDEN PAIR ROW
-    CHECK HIDDEN PAIR COLLUMN
-    CHECK HIDDEN PAIR BLOCK
+
+
 
 NAKED_PAIR_CHECK()
-    CHECK NAKED PAIR ROW
-    CHECK NAKED PAIR COLLUMN
-    CHECK NAKED PAIR BLOCK
+    SEARCH EVERY CELL IN HOUSE
+        IF A CELL HAS ONLY 2 CANDIDATES
+            ADD TO LIST
+    FOR EVERY CELL IN LIST
+        SAVE 2 CANDIDATES
+        SEARCH OTHER CELLS IN LIST FOR CANDIDATE MATCH
+        IF MATCH
+            REMOVE ALL CANDIDATES IN ALL OTHER CELLS IN HOUSE
+        IF NO MATCH
+            REMOVE CELL FROM LIST            
+
+NAKED_PAIR_CHECK()
+    SEARCH EVERY CELL IN HOUSE
+        IF A CELL HAS ONLY 2 CANDIDATES
+            SEARCH OTHER CELLS IN LIST FOR CANDIDATE MATCH
+            IF MATCH
+                REMOVE ALL CANDIDATES IN ALL OTHER CELLS IN HOUSE
+            IF NO MATCH
+                REMOVE CELL FROM LIST           
 
 SOLVE_CELL()
     ENTER NUMBER
