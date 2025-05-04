@@ -180,9 +180,12 @@ MAIN
 
 TODO
 ------
-#grid_scan() - should rename solve_grid()
-WHILE NOT SOLVED
-    NAKED SINGLE (CALLS ITSELF)
-    HIDDEN SINGLE (CALLS NAKED SINGLE AND ITSELF)
-    PAIRS AND SO ON... (DOESN'T CALL ITSELF)
-    CHECK IF GRID SOLVED
+Grid_nakedpairblock,csv
+    Should find naked pair 7,5 in block 1
+
+
+
+
+Change block behaviour
+    atm it moves 1->4->7->2->5->8->9
+    should be 123456789
