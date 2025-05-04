@@ -355,6 +355,7 @@ def main():
     print("Candidate grid:")
     print_candidate_grid(candidate_grid)
 
+    #COMPUTE SOLUTION
     
     print()
     print("Final grid:")
