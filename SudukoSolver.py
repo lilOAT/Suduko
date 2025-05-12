@@ -22,6 +22,12 @@ def import_grid(file_name):
             grid.append([int(num) for num in row])
     return grid
 
+def export_grid(grid):
+    filename = 'csvOut.csv'
+    with open(filename, 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerows(grid)
+    pass
 
 def create_candidate_grid():
 # Creates a 9x9 grid with each cell containing a list of 9 candidates
@@ -142,6 +148,7 @@ def is_number_in_col(x, j, grid):
 
 def solve_cell(candidate_grid, grid, i, j, cell_solution):
     grid[i][j] = cell_solution
+    print(f"-- CELL {i,j} SOLVED WITH {cell_solution}")
     #Clear solved cell's candidate cell
     for x in range(9):
         candidate_grid[i][j][x] = "."
@@ -187,26 +194,22 @@ def update_candidate_block(candidate_grid, i, j, cell_solution):
         ii+=1
 
 
-def grid_scan(candidate_grid, grid):
-#This wrapper function only runs its functions if the grid isn't solved.
-#The idea is to reduce the redundant recursion collapse after complete solve.
-    #Naked Single Check
-    if not is_grid_complete(grid):
-        print()
-        print("Executing: Naked Single Check...")
+def solve_grid(candidate_grid, grid):
+    is_complete = False
+    for run_times in range(10):
         naked_single_check(candidate_grid, grid)
-    #Hidden Single Check
-    if not is_grid_complete(grid):
-        print()
-        print("Executing: Hidden Single Check...")
         hidden_single_check(candidate_grid, grid)
-    #Naked Pair Check
-    if not is_grid_complete(grid):
-        print()
-        print("Executing: Naked Pair Check")
         naked_pair_check(candidate_grid, grid)
+        is_complete = is_grid_complete(grid)
+        if is_complete:
+            print()
+            print("SOLVED")
+            print(f"Number of full loops required: {run_times}")
+            return
+        print("------------- END LOOP -------------")
 
 def is_grid_complete(grid):
+#Returns true if grid is complete
     for row in grid:
         for cell in row:
             if cell == 0:
@@ -215,23 +218,26 @@ def is_grid_complete(grid):
 
 
 def naked_single_check(candidate_grid, grid):
+#If there is a naked single: sovle cell -> recurse function -> end
+    print("Entering naked single")
     for i in range(9):
         for j in range(9):
             non_candidate_count = candidate_grid[i][j].count(".")
             if non_candidate_count == 8:
                 cell_solution = next(item for item in candidate_grid[i][j] if isinstance(item, int))
-                print(cell_solution, "at ", i,j)
+                print(f"  naked single found {cell_solution} at {i,j}")
                 solve_cell(candidate_grid, grid, i, j, cell_solution)
                 naked_single_check(candidate_grid, grid)
                 return
 
 
 def hidden_single_check(candidate_grid, grid):
-    hidden_single_row_check(candidate_grid, grid)
-    hidden_single_col_check(candidate_grid, grid)
-    hidden_single_block_check(candidate_grid, grid)
+        hidden_single_row_check(candidate_grid, grid)
+        hidden_single_col_check(candidate_grid, grid)
+        hidden_single_block_check(candidate_grid, grid)
 
 def hidden_single_row_check(candidate_grid, grid):
+    print("Entering hidden single row check")
     for curr_candidate in range(1,10):
         for i in range(9):
             candidate_count = 0
@@ -241,13 +247,14 @@ def hidden_single_row_check(candidate_grid, grid):
                     ii = i
                     jj = j
             if candidate_count == 1:
-                print(f"hidden single row found ({curr_candidate}) at {ii,jj}")
+                print(f"  hidden single row found {curr_candidate} at {ii,jj}")
                 solve_cell(candidate_grid, grid, ii, jj, curr_candidate)
                 naked_single_check(candidate_grid, grid)
-                hidden_single_check(candidate_grid, grid)
+                #hidden_single_check(candidate_grid, grid)
                 return
 
 def hidden_single_col_check(candidate_grid, grid):
+    print("Entering hidden single col check")
     for curr_candidate in range(1,10):
         for j in range(9):
             candidate_count = 0
@@ -257,13 +264,14 @@ def hidden_single_col_check(candidate_grid, grid):
                     ii = i
                     jj = j
             if candidate_count == 1:
-                print(f"hidden single col found ({curr_candidate}) at {ii,jj}")
+                print(f"hidden single col found {curr_candidate} at {ii,jj}")
                 solve_cell(candidate_grid, grid, ii, jj, curr_candidate)
                 naked_single_check(candidate_grid, grid)
-                hidden_single_check(candidate_grid, grid)
+                #hidden_single_check(candidate_grid, grid)
                 return
 
 def hidden_single_block_check(candidate_grid, grid):
+    print("Entering hidden single block check")
     i = 0
     j = 0
     for block in range(9):
@@ -283,10 +291,10 @@ def hidden_single_block_check(candidate_grid, grid):
             i -= 3
             #print("Candidate ", curr_candidate, " occurs ", candidate_count)
             if candidate_count == 1:
-                print(f"hidden single block found ({curr_candidate}) at {ii,jj}")
+                print(f"  hidden single block found {curr_candidate} at {ii,jj}")
                 solve_cell(candidate_grid, grid, ii, jj, curr_candidate)
                 naked_single_check(candidate_grid, grid)
-                hidden_single_check(candidate_grid, grid)
+                #hidden_single_check(candidate_grid, grid)
                 return
         #Move to next block
         if i != 6:
@@ -298,10 +306,11 @@ def hidden_single_block_check(candidate_grid, grid):
 
 def naked_pair_check(candidate_grid, grid):
     naked_pair_row_check(candidate_grid, grid)
-    #naked_pair_col_check(candidate_grid, grid)
-    #naked_pair_block_check(candidate_grid, grid)
+    naked_pair_col_check(candidate_grid, grid)
+    naked_pair_block_check(candidate_grid, grid)
 
 def naked_pair_row_check(candidate_grid, grid):
+    print("Entering naked pair row check")
     for i in range(9):
         for j in range(9):
             candidate_count = 9 - candidate_grid[i][j].count(".")
@@ -323,27 +332,126 @@ def naked_pair_row_check(candidate_grid, grid):
                                 naked_pair_2.append(item_in_next)
                         #if contains same candidates, remove all other occurances of candidates
                         if naked_pair_1 == naked_pair_2:
+                            print(f"  Naked pair {naked_pair_1} found at: {i,j} and {i,jj}")
                             for jjj in range(9):
                                 #Don't remove the naked pair cells
                                 if jjj != jj and jjj != j:
                                     for naked_pair_item in naked_pair_1:
                                         if naked_pair_item in candidate_grid[i][jjj]:
                                             candidate_grid[i][jjj][naked_pair_item-1] = "."
-                                            naked_single_check(candidate_grid, grid)
-                                            hidden_single_check(candidate_grid, grid)
-
+                                            print(f"    Removed candidate {naked_pair_item} in {i,jjj}")
+                            
 def naked_pair_col_check(candidate_grid, grid):
-    pass
+    print("Entering naked pair col check")
+    for j in range(9):
+        for i in range(9):
+            candidate_count = 9 - candidate_grid[i][j].count(".")
+            if candidate_count == 2:
+                #Save 2 candidates
+                naked_pair_1 = []
+                for item in candidate_grid[i][j]:
+                    if isinstance(item, int):
+                        naked_pair_1.append(item)
 
+                #Check through remaining cells in row
+                for ii in range(i+1,9):
+                    candidate_count = 9 - candidate_grid[ii][j].count(".")
+                    if candidate_count == 2:
+                        #Save 2 candidates
+                        naked_pair_2 = []
+                        for item_in_next in candidate_grid[ii][j]:
+                            if isinstance(item_in_next, int):
+                                naked_pair_2.append(item_in_next)
+                        #if contains same candidates, remove all other occurances of candidates
+                        if naked_pair_1 == naked_pair_2:
+                            print(f"  Naked pair {naked_pair_1} found at: {i,j} and {ii,j}")
+                            for iii in range(9):
+                                #Don't remove the naked pair cells
+                                if iii == ii and iii == i:
+                                    for naked_pair_item in naked_pair_1:
+                                        if naked_pair_item in candidate_grid[iii][j]:
+                                            candidate_grid[iii][j][naked_pair_item-1] = "."
+                                            print(f"    Removed candidate {naked_pair_item} in {iii,j}")
+                            
 def naked_pair_block_check(candidate_grid, grid):
-    pass
-                
+    print("Entering naked pair block check")
+    i = 0
+    j = 0
+    ii = 0
+    jj = 0
+    iii = 0
+    jjj = 0
+    for block in range(9):
+            for row_count in range(3):
+                for col_count in range(3):
+                    candidate_count = 9 - candidate_grid[i][j].count(".")
+                    if candidate_count == 2:
+                        #Save 2 candidates
+                        naked_pair_1 = []
+                        for item in candidate_grid[i][j]:
+                            if isinstance(item, int):
+                                naked_pair_1.append(item)
+
+                        #Check through remaining cells in the block
+                        for row_count2 in range(3):
+                            for col_count2 in range(3):
+                                if not (ii == i and jj == j):
+                                    candidate_count = 9 - candidate_grid[ii][jj].count(".")
+                                    if candidate_count == 2:
+                                        #Save 2 candidates
+                                        naked_pair_2 = []
+                                        for item in candidate_grid[ii][jj]:
+                                            if isinstance(item, int):
+                                                naked_pair_2.append(item)
+                                        #if contains same candidates, remove all other occurances of candidates
+                                        if naked_pair_1 == naked_pair_2:
+                                            print(f"  Naked pair {naked_pair_1} found at: {i,j} and {ii,jj}")
+
+                                            for row_count3 in range(3):
+                                                for col_count3 in range(3):
+                                                    #Don't remove the naked pair cells          #TODO v not done
+                                                    if not (iii == i and jjj == j) and not (iii == ii and jjj == jj):                   #if iterated cell not one of the cells that have naked pair
+                                                        for naked_pair_item in naked_pair_1:
+                                                            if naked_pair_item in candidate_grid[iii][jjj]:
+                                                                candidate_grid[iii][jjj][naked_pair_item-1] = "."
+                                                                print(f"    Removed candidate {naked_pair_item} in {iii,jjj}")
+                                                    jjj+=1
+                                                jjj-=3
+                                                iii+=1
+                                            #Return to start cell of block
+                                            iii -= 3
+
+                                jj+=1
+                            jj-=3
+                            ii+=1
+                        #Return to start cell of block
+                        ii -= 3
+
+                    j+=1
+                j-=3
+                i+=1
+            #Return to start cell of block
+            i -= 3
+
+            #Move to next block
+            if i != 6:
+                i += 3
+                ii += 3
+                iii += 3
+            else:
+                i = 0
+                j += 3
+                ii = 0
+                jj += 3
+                iii = 0
+                jjj += 3
+
                     
 
 #========== MAIN ==========
 def main():
     #Initialise grids
-    grid = import_grid('Grid_hidden+nakedpair.csv')
+    grid = import_grid('Grids/Grid_624.csv')
     candidate_grid = create_candidate_grid()
     initialise_candidate_grid(grid, candidate_grid)
 
@@ -356,6 +464,7 @@ def main():
     print_candidate_grid(candidate_grid)
 
     #COMPUTE SOLUTION
+    solve_grid(candidate_grid,grid)
     
     print()
     print("Final grid:")
@@ -364,9 +473,27 @@ def main():
     print("Final candidate grid:")
     print_candidate_grid(candidate_grid)
 
+    if not is_grid_complete(grid):
+        print()
+        new_candidate_grid = create_candidate_grid()
+        initialise_candidate_grid(grid, new_candidate_grid)
+        print("Does final candidate grid match calculated grid:")
+        print(candidate_grid == new_candidate_grid)
+ 
+    #Save final grid state
+    print()
+    print("Saving current grid as CSV")
+    export_grid(grid)
+    print()
+
+    #Test
     print()
     print("test...")
-    print(is_grid_complete(grid))
+
+    test_grid = import_grid("Grids/Grid_hiddenpaircol.csv")
+    test_candidate_grid = create_candidate_grid()
+    initialise_candidate_grid(test_grid, test_candidate_grid)
+    print_candidate_grid(test_candidate_grid)
 
 
 if __name__ == '__main__':
