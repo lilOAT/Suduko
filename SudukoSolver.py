@@ -22,6 +22,12 @@ def import_grid(file_name):
             grid.append([int(num) for num in row])
     return grid
 
+def export_grid(grid):
+    filename = 'csvOut.csv'
+    with open(filename, 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerows(grid)
+    pass
 
 def create_candidate_grid():
 # Creates a 9x9 grid with each cell containing a list of 9 candidates
@@ -142,6 +148,7 @@ def is_number_in_col(x, j, grid):
 
 def solve_cell(candidate_grid, grid, i, j, cell_solution):
     grid[i][j] = cell_solution
+    print(f"-- CELL {i,j} SOLVED WITH {cell_solution}")
     #Clear solved cell's candidate cell
     for x in range(9):
         candidate_grid[i][j][x] = "."
@@ -189,14 +196,17 @@ def update_candidate_block(candidate_grid, i, j, cell_solution):
 
 def solve_grid(candidate_grid, grid):
     is_complete = False
-    for run_times in range(100):
+    for run_times in range(10):
         naked_single_check(candidate_grid, grid)
         hidden_single_check(candidate_grid, grid)
         naked_pair_check(candidate_grid, grid)
         is_complete = is_grid_complete(grid)
         if is_complete:
-            print(f"Solved at run time: {run_times}")
+            print()
+            print("SOLVED")
+            print(f"Number of full loops required: {run_times}")
             return
+        print("------------- END LOOP -------------")
 
 def is_grid_complete(grid):
 #Returns true if grid is complete
@@ -209,6 +219,7 @@ def is_grid_complete(grid):
 
 def naked_single_check(candidate_grid, grid):
 #If there is a naked single: sovle cell -> recurse function -> end
+    print("Entering naked single")
     for i in range(9):
         for j in range(9):
             non_candidate_count = candidate_grid[i][j].count(".")
@@ -236,10 +247,10 @@ def hidden_single_row_check(candidate_grid, grid):
                     ii = i
                     jj = j
             if candidate_count == 1:
-                print(f"hidden single row found {curr_candidate} at {ii,jj}")
+                print(f"  hidden single row found {curr_candidate} at {ii,jj}")
                 solve_cell(candidate_grid, grid, ii, jj, curr_candidate)
                 naked_single_check(candidate_grid, grid)
-                hidden_single_check(candidate_grid, grid)
+                #hidden_single_check(candidate_grid, grid)
                 return
 
 def hidden_single_col_check(candidate_grid, grid):
@@ -256,7 +267,7 @@ def hidden_single_col_check(candidate_grid, grid):
                 print(f"hidden single col found {curr_candidate} at {ii,jj}")
                 solve_cell(candidate_grid, grid, ii, jj, curr_candidate)
                 naked_single_check(candidate_grid, grid)
-                hidden_single_check(candidate_grid, grid)
+                #hidden_single_check(candidate_grid, grid)
                 return
 
 def hidden_single_block_check(candidate_grid, grid):
@@ -283,7 +294,7 @@ def hidden_single_block_check(candidate_grid, grid):
                 print(f"  hidden single block found {curr_candidate} at {ii,jj}")
                 solve_cell(candidate_grid, grid, ii, jj, curr_candidate)
                 naked_single_check(candidate_grid, grid)
-                hidden_single_check(candidate_grid, grid)
+                #hidden_single_check(candidate_grid, grid)
                 return
         #Move to next block
         if i != 6:
@@ -356,7 +367,7 @@ def naked_pair_col_check(candidate_grid, grid):
                             print(f"  Naked pair {naked_pair_1} found at: {i,j} and {ii,j}")
                             for iii in range(9):
                                 #Don't remove the naked pair cells
-                                if iii != ii and iii != i:
+                                if iii == ii and iii == i:
                                     for naked_pair_item in naked_pair_1:
                                         if naked_pair_item in candidate_grid[iii][j]:
                                             candidate_grid[iii][j][naked_pair_item-1] = "."
@@ -384,7 +395,7 @@ def naked_pair_block_check(candidate_grid, grid):
                         #Check through remaining cells in the block
                         for row_count2 in range(3):
                             for col_count2 in range(3):
-                                if ii != i and jj != j:
+                                if not (ii == i and jj == j):
                                     candidate_count = 9 - candidate_grid[ii][jj].count(".")
                                     if candidate_count == 2:
                                         #Save 2 candidates
@@ -394,7 +405,7 @@ def naked_pair_block_check(candidate_grid, grid):
                                                 naked_pair_2.append(item)
                                         #if contains same candidates, remove all other occurances of candidates
                                         if naked_pair_1 == naked_pair_2:
-                                            print(f"  Naked pair {naked_pair_1} found at: {i,j} and {ii,j}")
+                                            print(f"  Naked pair {naked_pair_1} found at: {i,j} and {ii,jj}")
 
                                             for row_count3 in range(3):
                                                 for col_count3 in range(3):
@@ -440,7 +451,7 @@ def naked_pair_block_check(candidate_grid, grid):
 #========== MAIN ==========
 def main():
     #Initialise grids
-    grid = import_grid('Grid_nakedpaircol.csv')
+    grid = import_grid('Grids/Grid_624.csv')
     candidate_grid = create_candidate_grid()
     initialise_candidate_grid(grid, candidate_grid)
 
@@ -462,11 +473,27 @@ def main():
     print("Final candidate grid:")
     print_candidate_grid(candidate_grid)
 
+    if not is_grid_complete(grid):
+        print()
+        new_candidate_grid = create_candidate_grid()
+        initialise_candidate_grid(grid, new_candidate_grid)
+        print("Does final candidate grid match calculated grid:")
+        print(candidate_grid == new_candidate_grid)
+ 
+    #Save final grid state
+    print()
+    print("Saving current grid as CSV")
+    export_grid(grid)
+    print()
+
+    #Test
     print()
     print("test...")
-    print(is_grid_complete(grid))
- 
-    #Test
+
+    test_grid = import_grid("Grids/Grid_hiddenpaircol.csv")
+    test_candidate_grid = create_candidate_grid()
+    initialise_candidate_grid(test_grid, test_candidate_grid)
+    print_candidate_grid(test_candidate_grid)
 
 
 if __name__ == '__main__':

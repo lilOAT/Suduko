@@ -81,6 +81,7 @@ Techniques
         2 cells can only be solved with the same candidates, within a house.
         All other appearances of either of these candidates within the house can be removed.
     Eliminating Single
+    Locked Candidate
 
 
 -----------
@@ -180,12 +181,18 @@ MAIN
 
 TODO
 ------
-Grid_nakedpairblock,csv
+Grid_nakedpairblock
     Should find naked pair 7,5 in block 1
 
-
-
+TEST HARNESS!!!
 
 Change block behaviour
-    atm it moves 1->4->7->2->5->8->9
+    atm it moves 1->4->7->2->5->8->3->6->9
     should be 123456789
+
+Hidden pair Block - Grid_hiddenpairblock
+    Block 5 has hidden pair (1,9)
+
+Hidden pair col - Grid_hiddenpaircol
+    Row 0 has hidden pair (2,6)
+
