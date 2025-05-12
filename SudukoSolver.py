@@ -1,10 +1,11 @@
 from solving_techniques import *
 from grid_utils import *
+from grid_operations import *
 
 #========== MAIN ==========
 def main():
     #Initialise grids
-    grid = import_grid('Grids/Grid_624.csv')
+    grid = import_grid('Grids/Grid_nakedpairblock.csv')
     candidate_grid = create_candidate_grid()
     initialise_candidate_grid(grid, candidate_grid)
 
@@ -43,11 +44,12 @@ def main():
     print()
     print("test...")
 
+"""
     test_grid = import_grid("Grids/Grid_hiddenpaircol.csv")
     test_candidate_grid = create_candidate_grid()
     initialise_candidate_grid(test_grid, test_candidate_grid)
     print_candidate_grid(test_candidate_grid)
-
+"""
 
 if __name__ == '__main__':
     main()

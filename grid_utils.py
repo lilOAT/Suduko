@@ -12,41 +12,6 @@ def print_grid(grid):
         print()  # new line after each row
     print()
 
-def import_grid(file_name):
-# Takes a CSV file and creates a 9x9 grid in the form of a 2d list
-    grid = []
-    with open(file_name, newline='') as csvfile:
-        reader = csv.reader(csvfile)
-        for row in reader:
-            grid.append([int(num) for num in row])
-    return grid
-
-def export_grid(grid):
-    filename = 'csvOut.csv'
-    with open(filename, 'w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerows(grid)
-    pass
-
-def create_candidate_grid():
-# Creates a 9x9 grid with each cell containing a list of 9 candidates
-    candidate_grid = []
-    for i in range(9):
-        candidate_grid.append([])
-        for j in range(9):
-            candidate_grid[i].append([])
-            for k in range(9):
-                candidate_grid[i][j].append(".")
-    return candidate_grid
-
-def populate_candidate_grid(candidate_grid):
-#DEPRECATED
-# populates candidate grid with values for debugging
-    for i in range(9):
-        for j in range(9):
-            for k in range(9):
-                    candidate_grid[i][j][k] = str(i)+str(j)+str(k)
-
 def print_candidate_grid(candidate_grid):          
 #Prints large Candidate grid 27x27
 #Function iterates through each row, printing 3 candidates at a time for each cell
@@ -92,6 +57,43 @@ def print_candidate_grid(candidate_grid):
         elif i != 8:
             print("=" * 71)
 
+
+def import_grid(file_name):
+# Takes a CSV file and creates a 9x9 grid in the form of a 2d list
+    grid = []
+    with open(file_name, newline='') as csvfile:
+        reader = csv.reader(csvfile)
+        for row in reader:
+            grid.append([int(num) for num in row])
+    return grid
+
+def export_grid(grid):
+    filename = 'csvOut.csv'
+    with open(filename, 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerows(grid)
+    pass
+
+
+def create_candidate_grid():
+# Creates a 9x9 grid with each cell containing a list of 9 candidates
+    candidate_grid = []
+    for i in range(9):
+        candidate_grid.append([])
+        for j in range(9):
+            candidate_grid[i].append([])
+            for k in range(9):
+                candidate_grid[i][j].append(".")
+    return candidate_grid
+
+def populate_candidate_grid(candidate_grid):
+#DEPRECATED
+# populates candidate grid with values for debugging
+    for i in range(9):
+        for j in range(9):
+            for k in range(9):
+                    candidate_grid[i][j][k] = str(i)+str(j)+str(k)
+
 def initialise_candidate_grid(grid, candidate_grid):
     for i in range(9):
         for j in range(9):
@@ -101,6 +103,7 @@ def initialise_candidate_grid(grid, candidate_grid):
                         if not is_number_in_row(x, i, grid):
                             if not is_number_in_col(x, j, grid):
                                 candidate_grid[i][j][x-1] = x
+
 
 def is_number_in_block(x, i, j, grid):
     block_contains_x = False

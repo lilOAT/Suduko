@@ -4,12 +4,16 @@ Definitions
     Block
     Row
     Collumn
-    House           Either Block, Row or Collumn
+    House
+        Either Block, Row or Collumn
 
 Blocks
     1 2 3
     4 5 6
     7 8 9
+
+Block iteration behaviour
+    1->4->7->2->5->8->3->6->9
 
 [row][col]
     The first '5' is [0][2]
@@ -29,7 +33,7 @@ Blocks
     Locate the grid cell first [0][1]
     Then locate numerical value position in list of candidates
     Candidate 1 = item 0. Candidate 9 = item 8.
-    The '2' candidate are [0][1][1]
+    The '2' coordinates are [0][1][1]
 . . . | . . . | . . . || . 2 . | . . . | . . . || . . . | . . . | . . . 
 . . . | . . . | . . . || . . . | . . . | . . . || . . . | . . . | . . . 
 . . . | . . . | . . . || . . . | . . . | . . . || . . . | . . . | . . . 
@@ -82,6 +86,9 @@ Techniques
         All other appearances of either of these candidates within the house can be removed.
     Eliminating Single
     Locked Candidate
+        When a candidate only appears in a house within another house
+        eg. candidate appears in block twice in the same Collumn
+            all other appearances of candidate in collumn are removed
 
 
 -----------
@@ -181,14 +188,7 @@ MAIN
 
 TODO
 ------
-Grid_nakedpairblock
-    Should find naked pair 7,5 in block 1
-
 TEST HARNESS!!!
-
-Change block behaviour
-    atm it moves 1->4->7->2->5->8->3->6->9
-    should be 123456789
 
 Hidden pair Block - Grid_hiddenpairblock
     Block 5 has hidden pair (1,9)
