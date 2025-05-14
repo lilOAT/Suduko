@@ -37,7 +37,7 @@ def main():
     #Save final grid state
     print()
     print("Saving current grid as CSV")
-    export_grid(grid)
+    export_grid(grid, "csvOut.csv")
     print()
 
     #Test

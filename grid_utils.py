@@ -20,7 +20,8 @@ def print_candidate_grid(candidate_grid):
         for j in range(9):
         #Prints values 1-3 in each candidate cell
             for k in range(3):
-                print(candidate_grid[i][j][k], end=" ")
+                val = candidate_grid[i][j][k]
+                print(val if val != 0 else ".", end=" ")
             #Printing lines
             if j % 3 == 2 and j != 8:
                 print("||", end=" ")
@@ -31,7 +32,8 @@ def print_candidate_grid(candidate_grid):
         for j in range(9):
         #Prints values 4-6 in each candidate cell
             for k in range(3, 6):
-                print(candidate_grid[i][j][k], end=" ")
+                val = candidate_grid[i][j][k]
+                print(val if val != 0 else ".", end=" ")
             #Printing lines
             if j % 3 == 2 and j != 8:
                 print("||", end=" ")
@@ -42,7 +44,8 @@ def print_candidate_grid(candidate_grid):
         for j in range(9):
         #Prints values 7-9 in each candidate cell
             for k in range(6, 9):
-                print(candidate_grid[i][j][k], end=" ")
+                val = candidate_grid[i][j][k]
+                print(val if val != 0 else ".", end=" ")
             #Printing lines
             if j % 3 == 2 and j != 8:
                 print("||", end=" ")
@@ -67,8 +70,7 @@ def import_grid(file_name):
             grid.append([int(num) for num in row])
     return grid
 
-def export_grid(grid):
-    filename = 'csvOut.csv'
+def export_grid(grid, filename):
     with open(filename, 'w', newline='') as file:
         writer = csv.writer(file)
         writer.writerows(grid)
@@ -83,16 +85,8 @@ def create_candidate_grid():
         for j in range(9):
             candidate_grid[i].append([])
             for k in range(9):
-                candidate_grid[i][j].append(".")
+                candidate_grid[i][j].append(0)
     return candidate_grid
-
-def populate_candidate_grid(candidate_grid):
-#DEPRECATED
-# populates candidate grid with values for debugging
-    for i in range(9):
-        for j in range(9):
-            for k in range(9):
-                    candidate_grid[i][j][k] = str(i)+str(j)+str(k)
 
 def initialise_candidate_grid(grid, candidate_grid):
     for i in range(9):
