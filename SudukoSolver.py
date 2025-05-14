@@ -5,7 +5,7 @@ from grid_operations import *
 #========== MAIN ==========
 def main():
     #Initialise grids
-    grid = import_grid('Grids/Grid_nakedpairblock.csv')
+    grid = import_grid('Grids/Grid_100.csv')
     candidate_grid = create_candidate_grid()
     initialise_candidate_grid(grid, candidate_grid)
 
@@ -37,7 +37,7 @@ def main():
     #Save final grid state
     print()
     print("Saving current grid as CSV")
-    export_grid(grid, "csvOut.csv")
+    export_grid(grid, "Grids/csvOut.csv")
     print()
 
     #Test

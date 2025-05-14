@@ -1,9 +1,10 @@
 def solve_cell(candidate_grid, grid, i, j, cell_solution):
     grid[i][j] = cell_solution
-    print(f"-- CELL {i,j} SOLVED WITH {cell_solution}")
+    if __debug__:
+        print(f"-- CELL {i,j} SOLVED WITH {cell_solution}")
     #Clear solved cell's candidate cell
     for x in range(9):
-        candidate_grid[i][j][x] = "."
+        candidate_grid[i][j][x] = 0
     update_candidate_grid(candidate_grid, i, j, cell_solution)
 
 def is_grid_complete(grid):
@@ -23,12 +24,12 @@ def update_candidate_grid(candidate_grid, i, j, cell_solution):
 def update_candidate_row(candidate_grid, i, cell_solution):
     for j in range(9):
         if cell_solution in candidate_grid[i][j]:
-            candidate_grid[i][j][cell_solution-1] = "."
+            candidate_grid[i][j][cell_solution-1] = 0
 
 def update_candidate_col(candidate_grid, j, cell_solution):
     for i in range(9):
         if cell_solution in candidate_grid[i][j]:
-            candidate_grid[i][j][cell_solution-1] = "."
+            candidate_grid[i][j][cell_solution-1] = 0
 
 def update_candidate_block(candidate_grid, i, j, cell_solution):
     #Set i to row start of block
@@ -49,7 +50,7 @@ def update_candidate_block(candidate_grid, i, j, cell_solution):
     for row_counter in range (3):
         for col_counter in range(3):
             if cell_solution in candidate_grid[ii][jj]:
-                candidate_grid[ii][jj][cell_solution-1] = "."
+                candidate_grid[ii][jj][cell_solution-1] = 0
             jj+=1
         jj-=3
         ii+=1
