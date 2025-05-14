@@ -1,5 +1,6 @@
 from test_grid_utils import *
 from test_grid_operations import *
+from test_solving_techniques import *
 
 def main():
     print("Executing Test Harness...")
@@ -26,6 +27,14 @@ def main():
     print("        ",test_update_candidate_col())
     print("    update_candidate_block...")
     print("        ",test_update_candidate_block())
+    print()
+    print("Testing solving_techniques...")
+    print("    naked_single_check...")
+    print("        ",test_naked_single_check())
+    print("    hidden_single_row_check...")
+    print("        ",test_hidden_single_row_check())
+    print("    hidden_single_col_check...")
+    print("        ",test_hidden_single_col_check())
 
     print()
 
