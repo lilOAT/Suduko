@@ -75,7 +75,8 @@ def hidden_single_col_check(candidate_grid, grid):
                 return
 
 def hidden_single_block_check(candidate_grid, grid):
-    print("Entering hidden single block check")
+    if __debug__:
+        print("Entering hidden single block check")
     i = 0
     j = 0
     for block in range(9):
@@ -94,7 +95,8 @@ def hidden_single_block_check(candidate_grid, grid):
             i -= 3
             #print("Candidate ", curr_candidate, " occurs ", candidate_count)
             if candidate_count == 1:
-                print(f"  hidden single block found {curr_candidate} at {ii,jj}")
+                if __debug__:
+                    print(f"  hidden single block found {curr_candidate} at {ii,jj}")
                 solve_cell(candidate_grid, grid, ii, jj, curr_candidate)
                 naked_single_check(candidate_grid, grid)
                 #hidden_single_check(candidate_grid, grid)

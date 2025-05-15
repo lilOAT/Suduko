@@ -35,6 +35,8 @@ def main():
     print("        ",test_hidden_single_row_check())
     print("    hidden_single_col_check...")
     print("        ",test_hidden_single_col_check())
+    print("    hidden_single_block_check...")
+    print("        ",test_hidden_single_block_check())
 
     print()
 

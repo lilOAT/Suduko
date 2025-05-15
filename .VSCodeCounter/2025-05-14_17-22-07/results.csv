@@ -1,0 +1,10 @@
+"filename", "language", "Python", "comment", "blank", "total"
+"/Users/joelpita/Documents/Coding/Python Practise/Suduko/SudukoSolver.py", "Python", 40, 6, 9, 55
+"/Users/joelpita/Documents/Coding/Python Practise/Suduko/TestHarness/TestHarness.py", "Python", 39, 0, 6, 45
+"/Users/joelpita/Documents/Coding/Python Practise/Suduko/TestHarness/test_grid_operations.py", "Python", 504, 46, 17, 567
+"/Users/joelpita/Documents/Coding/Python Practise/Suduko/TestHarness/test_grid_utils.py", "Python", 227, 10, 19, 256
+"/Users/joelpita/Documents/Coding/Python Practise/Suduko/TestHarness/test_solving_techniques.py", "Python", 445, 41, 20, 506
+"/Users/joelpita/Documents/Coding/Python Practise/Suduko/grid_operations.py", "Python", 45, 4, 7, 56
+"/Users/joelpita/Documents/Coding/Python Practise/Suduko/grid_utils.py", "Python", 112, 15, 15, 142
+"/Users/joelpita/Documents/Coding/Python Practise/Suduko/solving_techniques.py", "Python", 204, 26, 20, 250
+"Total", "-", 1616, 148, 113, 1877
