@@ -1,3 +1,51 @@
+Sudoku Solver
+Made by Joel P (lilOAT)
+Current OS - macOS 15.4.1
+-----------------------------
+Welcome to the Sudoku Solver, a small project I am solely developing in my free time.
+The purpose is to solidify my programming skils, to learn Python and to understand GitHub.
+The desired program will have a GUI for user interaction.
+
+
+Functionality:
+    The program takes in a csv file of an unsolved sudoku grid and outputs a solved grid.
+    (STC) To change the input grid, change the filname in the main function of SudokuSolver.py
+
+Run:
+    Normal operation
+        ../Sudoku % python3 SudokuSolver.py
+
+    To remove debug messages:
+        ../Sudoku % python3 -O SudokuSolver.py
+
+    Run Test Harness:
+        ../Sudoku/TestHarness % python3 -O TestHarness.py
+
+Files:
+    📦Suduko
+    ┣ 📂Grids
+    ┃ ┣ 📜Grid_100.csv
+    ┃ ┣ 📜Grid_323.csv
+    ┃ ┣ 📜Grid_500.csv
+    ┃ ┣ 📜Grid_624.csv
+    ┃ ┣ 📜Grid_hidden+nakedpair.csv
+    ┃ ┣ 📜Grid_hiddenpairblock.csv
+    ┃ ┣ 📜Grid_hiddenpaircol.csv
+    ┃ ┣ 📜Grid_hiddensingleblock.csv
+    ┃ ┣ 📜Grid_nakedpairblock.csv
+    ┃ ┣ 📜Grid_nakedpaircol.csv
+    ┃ ┗ 📜csvOut.csv
+    ┣ 📂TestHarness
+    ┃ ┣ 📜TestHarness.py
+    ┃ ┣ 📜test_grid_operations.py
+    ┃ ┣ 📜test_grid_utils.py
+    ┃ ┗ 📜test_solving_techniques.py
+    ┣ 📜README.txt
+    ┣ 📜SudukoSolver.py
+    ┣ 📜grid_operations.py
+    ┣ 📜grid_utils.py
+    ┗ 📜solving_techniques.py
+
 
 Definitions
     Cell
@@ -189,6 +237,7 @@ MAIN
 TODO
 ------
 TEST HARNESS!!!
+    Before progressing with new algorithms
 
 Hidden pair Block - Grid_hiddenpairblock
     Block 5 has hidden pair (1,9)
