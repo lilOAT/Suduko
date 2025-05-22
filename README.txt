@@ -244,4 +244,3 @@ Hidden pair Block - Grid_hiddenpairblock
 
 Hidden pair col - Grid_hiddenpaircol
     Row 0 has hidden pair (2,6)
-

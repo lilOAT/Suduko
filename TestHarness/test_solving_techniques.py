@@ -671,3 +671,6 @@ def test_hidden_single_block_check():
 
     return result
 
+def test_naked_pair_row_check():
+    result = "Pass"
+    pass

@@ -1,6 +1,10 @@
 from grid_operations import *
 
 def solve_grid(candidate_grid, grid):
+# Runs all solving techniques until grid is solved, or loop limit reached
+# Loop limit set in for-loop range
+# naked_single_check is recursive
+# hidden_single_check calls naked_single_check if found
     is_complete = False
     for run_times in range(10):
         naked_single_check(candidate_grid, grid)
@@ -37,6 +41,10 @@ def hidden_single_check(candidate_grid, grid):
         hidden_single_block_check(candidate_grid, grid)
 
 def hidden_single_row_check(candidate_grid, grid):
+# For each candidate, search through each cell within a row and count occurances of candidate
+# If the candidate only appears once, hidden single found
+# If hidden single found, solve cell -> call naked_single_check -> return
+#       returning stops unnecasary computes on recursion collapse
     if __debug__:
         print("Entering hidden single row check")
     for curr_candidate in range(1,10):
@@ -52,10 +60,13 @@ def hidden_single_row_check(candidate_grid, grid):
                     print(f"  hidden single row found {curr_candidate} at {ii,jj}")
                 solve_cell(candidate_grid, grid, ii, jj, curr_candidate)
                 naked_single_check(candidate_grid, grid)
-                #hidden_single_check(candidate_grid, grid)
                 return
 
 def hidden_single_col_check(candidate_grid, grid):
+# For each candidate, search through each cell within a column and count occurances of candidate
+# If the candidate only appears once, hidden single found
+# If hidden single found, solve cell -> call naked_single_check -> return
+#       returning stops unnecasary computes on recursion collapse
     if __debug__:
         print("Entering hidden single col check")
     for curr_candidate in range(1,10):
@@ -75,6 +86,10 @@ def hidden_single_col_check(candidate_grid, grid):
                 return
 
 def hidden_single_block_check(candidate_grid, grid):
+# For each candidate, search through each cell within a block and count occurances of candidate
+# If the candidate only appears once, hidden single found
+# If hidden single found, solve cell -> call naked_single_check -> return
+#       returning stops unnecasary computes on recursion collapse
     if __debug__:
         print("Entering hidden single block check")
     i = 0
@@ -115,6 +130,10 @@ def naked_pair_check(candidate_grid, grid):
     naked_pair_block_check(candidate_grid, grid)
 
 def naked_pair_row_check(candidate_grid, grid):
+# Search through each cell by row, looking for cells with only 2 candidates.
+# If cell has 2 candidates, search through remaining cells in row for other cells with 2 candidates.
+# If the next cell that contains 2 candidates has the same 2 candidates as first cell, naked pair found.
+# If naked pair found, remove all other occurances of candidates involved with naked pair in current row
     print("Entering naked pair row check")
     for i in range(9):
         for j in range(9):
@@ -135,7 +154,7 @@ def naked_pair_row_check(candidate_grid, grid):
                         for item_in_next in candidate_grid[i][jj]:
                             if item_in_next != 0:
                                 naked_pair_2.append(item_in_next)
-                        #if contains same candidates, remove all other occurances of candidates
+                        #if cell contains same candidates, remove all other occurances of candidates in row
                         if naked_pair_1 == naked_pair_2:
                             print(f"  Naked pair {naked_pair_1} found at: {i,j} and {i,jj}")
                             for jjj in range(9):
@@ -147,6 +166,10 @@ def naked_pair_row_check(candidate_grid, grid):
                                             print(f"    Removed candidate {naked_pair_item} in {i,jjj}")
                             
 def naked_pair_col_check(candidate_grid, grid):
+# Search through each cell by column, looking for cells with only 2 candidates.
+# If cell has 2 candidates, search through remaining cells in column for other cells with 2 candidates.
+# If the next cell that contains 2 candidates has the same 2 candidates as first cell, naked pair found.
+# If naked pair found, remove all other occurances of candidates involved with naked pair in current column
     print("Entering naked pair col check")
     for j in range(9):
         for i in range(9):
@@ -167,7 +190,7 @@ def naked_pair_col_check(candidate_grid, grid):
                         for item_in_next in candidate_grid[ii][j]:
                             if item_in_next != 0:
                                 naked_pair_2.append(item_in_next)
-                        #if contains same candidates, remove all other occurances of candidates
+                        #if cell contains same candidates, remove all other occurances of candidates in col
                         if naked_pair_1 == naked_pair_2:
                             print(f"  Naked pair {naked_pair_1} found at: {i,j} and {ii,j}")
                             for iii in range(9):
@@ -179,6 +202,10 @@ def naked_pair_col_check(candidate_grid, grid):
                                             print(f"    Removed candidate {naked_pair_item} in {iii,j}")
                             
 def naked_pair_block_check(candidate_grid, grid):
+# Search through each cell by block, looking for cells with only 2 candidates.
+# If cell has 2 candidates, search through remaining cells in block for other cells with 2 candidates.
+# If the next cell that contains 2 candidates has the same 2 candidates as first cell, naked pair found.
+# If naked pair found, remove all other occurances of candidates involved with naked pair in current block
     print("Entering naked pair block check")
     i = 0
     j = 0
@@ -208,14 +235,14 @@ def naked_pair_block_check(candidate_grid, grid):
                                         for item in candidate_grid[ii][jj]:
                                             if item != 0:
                                                 naked_pair_2.append(item)
-                                        #if contains same candidates, remove all other occurances of candidates
+                                        #if contains same candidates, remove all other occurances of candidates in block
                                         if naked_pair_1 == naked_pair_2:
                                             print(f"  Naked pair {naked_pair_1} found at: {i,j} and {ii,jj}")
 
                                             for row_count3 in range(3):
                                                 for col_count3 in range(3):
                                                     #Don't remove the naked pair cells          #TODO v not done
-                                                    if not (iii == i and jjj == j) and not (iii == ii and jjj == jj):                   #if iterated cell not one of the cells that have naked pair
+                                                    if not (iii == i and jjj == j) and not (iii == ii and jjj == jj):
                                                         for naked_pair_item in naked_pair_1:
                                                             if naked_pair_item in candidate_grid[iii][jjj]:
                                                                 candidate_grid[iii][jjj][naked_pair_item-1] = 0
